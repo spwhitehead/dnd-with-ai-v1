@@ -1,26 +1,20 @@
-import openai
+from openai import OpenAI
 
-
-def get_api_key():
-    api_key = input("Enter your OpenAI API key: ")
-    return api_key
-
-# Function to initialize the OpenAI client with the provided API key
-
-
-def initialize_openai_client(api_key):
-    openai.api_key = api_key
+client = OpenAI(api_key=input("Enter your OpenAI API key: "))
 
 # Function to interact with ChatGPT and play the DND game
 
 
 def play_dnd_game():
-    initial_game_prompt = "You are a knight in the kingdom of Larion. You are on a quest to find the magical Sword of Larion, which is said to be hidden in the Cave of Wonders. You have been traveling for days and finally arrive at the cave."
+    initial_game_prompt = "You are a knight in the kingdom of Larion. You are on a quest to find the magical Sword of Larion, which is said to be hidden in the Cave of Wonders. You have been traveling for days and finally arrive at the cave. When you wish to quit, type 'quit'."
     print("Welcome to the Dungeons & Dragons game!")
     print()
-    print(initial_game_prompt)  # Initial game prompt
+    print(initial_game_prompt)
     print()
-    game_history = [{"role": "system", "content": initial_game_prompt}]
+    game_history = [
+        {"role": "system", "content": "You are a DND Game Master. You are playing a game with a user. The user is a knight in the kingdom of Larion. They are on a quest to find the magical Sword of Larion, which is said to be hidden in the Cave of Wonders. They have been traveling for days and finally arrive at the cave. The user is talking to you. Keep your responses in the context of the game. Keep the responses interesting, engaging, and as consise as possible."},
+        {"role": "user", "content": initial_game_prompt}
+    ]
     while True:
         user_input = input("You: ")
         if user_input.lower() == 'quit':
@@ -29,11 +23,10 @@ def play_dnd_game():
         else:
             game_history.append({"role": "user", "content": user_input})
             try:
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",  # Specify the model you want to use
-                    messages=game_history
-                )
-                game_response = response.choices[0].message["content"].strip()
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo", messages=game_history)
+
+                game_response = response.choices[0].message.content.strip()
                 print("Game Master:", game_response)
                 game_history.append(
                     {"role": "assistant", "content": game_response})
@@ -44,8 +37,6 @@ def play_dnd_game():
 
 
 def main():
-    api_key = get_api_key()
-    initialize_openai_client(api_key)
     play_dnd_game()
 
 
