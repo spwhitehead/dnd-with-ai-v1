@@ -1,12 +1,13 @@
-# dnd-with-ai-v1
-A simple DND game narrated by ChatGPT
+# DND with AI version 1 - SETUP
+## Description
+A simple DND game narrated by ChatGPT, based on user input.
 
 # Pip Install
-pip instal openai
+pip install OpenAI
 
 
 # Imports
-import openai
+from openai import OpenAI
 
 # Other
 Prior to running this code, you will need your own OpenAI API key.
