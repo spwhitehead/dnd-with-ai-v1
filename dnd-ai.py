@@ -29,6 +29,7 @@ def play_dnd_game():
     while True:
         user_input = input("You: ")
         if user_input.lower() == 'quit':
+            print()
             print("Goodbye! Thanks for playing.")
             break
         else:
