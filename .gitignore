@@ -1,2 +1,3 @@
 *.env
 api-key.txt
+openai-api-key.txt
