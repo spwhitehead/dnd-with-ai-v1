@@ -38,21 +38,20 @@ class DnDGame:
         self.game_history = []
         self.generate_initial_game_prompt
 
-    def generate_initial_game_prompt(self):
+    def generate_initial_game_prompt(self, time_period, location):
         prompt_instructions = f"Create a Dungeons & Dragons style campaign introduction for a player named {self.preferences.name}, " \
             f"set in a {self.preferences.time_period} time period, located in {self.preferences.location}. " \
             f"Include a quest for the player to embark on."
-        self.initial_game_prompt = prompt_instructions
 
-        self.game_history = [
-            {"role": "system", "content": f"""
-         You are a DND Game Master. You are narrating the game for the user. The user is talking to you.
-         You are to narrate and {self.initial_game_prompt}. Keep your responses in the context of the game.
-         Include unexpected occurances, such as getting attacked by animals or beasts, or other people. Introduce new characters periodically.
-         Subtilly push the user to keep going. At the end of each response, ask the user what they would like to do next.
-         Keep the responses interesting, engaging, and as consise as possible."""},
-            {"role": "user", "content": self.initial_game_prompt}
-        ]
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo", messages=prompt_instructions)
+            self.initial_game_prompt = response.choices.text.strip()
+        except Exception as e:
+            print(f"An error occured: {str(e)}")
+            self.initial_game_prompt = "An unexpected adventure awaits in a world beyond imagination. What will you find?"
+
+        print(self.initial_game_prompt)
 
     def start_game(self):
         print(str(self.preferences))
