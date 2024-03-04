@@ -1,4 +1,5 @@
 from openai import OpenAI
+import ai_game_init
 
 # get the api key from the openai-api-key.txt file
 with open("openai-api-key.txt", "r") as f:
@@ -13,7 +14,7 @@ def play_dnd_game():
     initial_game_prompt = """
     You are a knight in the kingdom of Larion. 
     You are on a quest to find the magical Sword of Larion, which is said to be hidden in the Cave of Wonders. 
-    You have been traveling for days and finally arrive at the cave. 
+    You have been traveling for days and finally arrive at the cave. What would you like to do?
     
     When you wish to quit, type 'quit'."
     """
