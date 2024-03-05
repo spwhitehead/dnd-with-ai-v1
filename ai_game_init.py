@@ -36,22 +36,24 @@ class DnDGame:
         self.preferences = preferences
         self.initial_game_prompt = ""
         self.game_history = []
-        self.generate_initial_game_prompt
 
-    def generate_initial_game_prompt(self, time_period, location):
-        prompt_instructions = f"Create a Dungeons & Dragons style campaign introduction for a player named {self.preferences.name}, " \
-            f"set in a {self.preferences.time_period} time period, located in {self.preferences.location}. " \
-            f"Include a quest for the player to embark on."
+    def generate_initial_game_prompt(self):
+        instruction_message = {
+            "role": "system",
+            "content": f"Generate a Dungeons & Dragons campaign introduction for a player named {self.preferences.name}, set in a '{self.preferences.time_period}' time period, in '{self.preferences.location}'. Include a quest for the player to embark on."
+        }
 
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo", messages=prompt_instructions)
-            self.initial_game_prompt = response.choices.text.strip()
+                model="gpt-3.5-turbo", messages=instruction_message)
+            self.initial_game_prompt = response.choices[0].message["content"].strip(
+            )
         except Exception as e:
             print(f"An error occured: {str(e)}")
             self.initial_game_prompt = "An unexpected adventure awaits in a world beyond imagination. What will you find?"
 
-        print(self.initial_game_prompt)
+        self.game_history.append(
+            {"role": "system", "content": self.initial_game_prompt})
 
     def start_game(self):
         print(str(self.preferences))
